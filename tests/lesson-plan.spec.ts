@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// ─── Passing Tests ───────────────────────────────────────────────────────────
-
 test.describe("Chat UI", () => {
   test("should display the input field and send button", async ({ page }) => {
     await page.goto("/");
@@ -25,13 +23,10 @@ test.describe("Chat UI", () => {
     await page.getByTestId("chat-input").fill("Volcanoes for 6th graders");
     await page.getByTestId("send-button").click();
 
-    // This correctly waits for the element to appear in the DOM
     await expect(page.getByTestId("message-user")).toBeVisible();
     await expect(page.getByTestId("message-user")).toContainText("Volcanoes");
   });
 });
-
-// ─── Flaky Test ──────────────────────────────────────────────────────────────
 
 test.describe("Lesson Plan Generation", () => {
   test("should generate a lesson plan about the given topic", async ({
