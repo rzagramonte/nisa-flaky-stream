@@ -13,10 +13,6 @@ export function MessageList({ messages, isStreaming }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 🐛 BUG: Scrolls to bottom on EVERY token update during streaming.
-  //    The `messages` array reference changes ~10 times per second while streaming.
-  //    This means if a user scrolls UP to re-read the top of a lesson plan,
-  //    they get jerked back to the bottom instantly. Very annoying UX.
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -38,7 +34,7 @@ export function MessageList({ messages, isStreaming }: MessageListProps) {
             }
           />
         ))}
-        <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} className="" />
       </div>
     </div>
   );

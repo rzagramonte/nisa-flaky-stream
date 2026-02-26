@@ -2,18 +2,14 @@
 
 import { useChat } from "@ai-sdk/react";
 import { Send } from "lucide-react";
-import { type FormEvent, useState } from "react";
+import { useState } from "react";
 import { MessageList } from "./message-list";
 
 export function Chat() {
   const { messages, status, sendMessage } = useChat();
   const [input, setInput] = useState("");
 
-  // 🐛 BUG: No guard against submitting while already loading.
-  //    No AbortController to cancel a previous stream.
-  //    Rapidly clicking "Send" or hitting Enter multiple times
-  //    starts concurrent streams that garble the message list.
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: { preventDefault(): void }) => {
     e.preventDefault();
     if (!input.trim()) return;
     sendMessage({ text: input });
@@ -72,18 +68,12 @@ export function Chat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="e.g. Photosynthesis for 5th graders..."
-            className="flex-1 rounded-lg border border-slate-300 px-4 py-2.5 text-sm
-                       focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary
-                       placeholder:text-slate-400"
+            className="flex-1 rounded-lg border border-slate-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary placeholder:text-slate-400"
             data-testid="chat-input"
           />
-          {/* 🐛 BUG: Button is NEVER disabled while streaming.
-              Users can click Send multiple times during generation. */}
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5
-                       text-sm font-medium text-white hover:bg-primary-hover
-                       transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors cursor-pointer"
             data-testid="send-button"
           >
             <Send className="w-4 h-4" />

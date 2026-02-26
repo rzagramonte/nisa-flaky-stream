@@ -42,12 +42,6 @@ test.describe("Lesson Plan Generation", () => {
     await page.getByTestId("chat-input").fill("Photosynthesis for 5th graders");
     await page.getByTestId("send-button").click();
 
-    // 🐛 FLAKY: Waits for the assistant message element to appear, then
-    //    immediately grabs its text without waiting for the stream to finish.
-    //    The element appears as soon as streaming starts, but the text
-    //    "Lesson Plan" requires several tokens to arrive (~100-200ms).
-    //    When the server responds quickly this passes; when there's latency
-    //    or the machine is under load, innerText() returns partial/empty text.
     const assistantMessage = page.getByTestId("message-assistant").last();
     await assistantMessage.waitFor({ state: "attached" });
     const text = await assistantMessage.innerText();
