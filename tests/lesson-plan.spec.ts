@@ -38,8 +38,8 @@ test.describe("Lesson Plan Generation", () => {
     await page.getByTestId("send-button").click();
 
     const assistantMessage = page.getByTestId("message-assistant").last();
-    await assistantMessage.waitFor({ state: "attached" });
-    const text = await assistantMessage.innerText();
-    expect(text).toContain("Lesson Plan");
+    await expect(assistantMessage).toContainText("Lesson Plan", {
+      timeout: 60000,
+    });
   });
 });
